@@ -6,9 +6,14 @@ from google import genai
 load_dotenv()
 
 # Create Gemini client
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+import streamlit as st
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    api_key = st.secrets["GEMINI_API_KEY"]
+
+client = genai.Client(api_key=api_key)
 
 
 def generate_ai_insight(question, summary):
