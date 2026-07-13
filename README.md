@@ -8,9 +8,23 @@ https://ai-business-insight-generator-ydxclonsuykkos3nekubr3.streamlit.app
 
 ---
 
+
 ## 📸 Dashboard Preview
 
-(Add screenshots here)
+![Dashboard](images/dashboard.png)
+
+## AI Assistant
+
+![Assistant](images/ai_assistant.png)
+
+## Report Preview
+![Report](images/report.png)
+
+## Charts 
+![Chart](images/chart_02.png)
+
+## AI Insights
+![AI Insights](images/ai_insights.png)
 
 ---
 
@@ -100,7 +114,3 @@ The Gemini AI assistant can answer questions like:
 Abhinav Sahu
 
 BCA (AI)
-
-LinkedIn
-
-GitHub
