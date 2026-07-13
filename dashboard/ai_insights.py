@@ -1,23 +1,22 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 from google import genai
 
 # Load .env
 load_dotenv()
 
-# Create Gemini client
-import streamlit as st
-
+# Get API Key
 api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
     api_key = st.secrets["GEMINI_API_KEY"]
 
+# Create Gemini Client
 client = genai.Client(api_key=api_key)
 
-
 def generate_ai_insight(question, summary):
-    
+
     prompt = f"""
 You are a Senior Business Strategy Consultant.
 
@@ -62,3 +61,10 @@ Rules:
 - Focus on business decisions.
 - Never repeat the dataset.
 """
+
+    response = client.models.generate_content(
+        model="gemini-3.5-flash",
+        contents=prompt
+    )
+
+    return response.text

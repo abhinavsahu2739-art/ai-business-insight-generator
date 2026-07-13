@@ -682,9 +682,11 @@ Highest Profit Sub-Category:
 Average Discount:
 {df_filtered["Discount"].mean():.2%}
 
-
 """
 def create_pdf(report_text):
+
+    if report_text is None:
+        report_text = "No AI report available."
 
     styles = getSampleStyleSheet()
 
@@ -692,10 +694,9 @@ def create_pdf(report_text):
 
     story = []
 
-    for line in report_text.split("\n"):
+    for line in str(report_text).split("\n"):
 
         if line.strip():
-
             story.append(
                 Paragraph(line, styles["BodyText"])
             )
@@ -709,7 +710,7 @@ def create_pdf(report_text):
 # =====================================================
 
 st.markdown("---")
-st.header("🤖 AI Business Assistant")
+st.header("🤖def create AI Business Assistant")
 
 st.caption("Ask questions about your business and receive AI-powered insights.")
 
@@ -757,30 +758,39 @@ question = st.text_area(
 # Ask Button
 # --------------------------
 
-if st.button(
-    "🚀 Analyze Business",
-    type="primary",
-    use_container_width=True
-):
+if st.button("🚀 Analyze Business"):
 
-    if question.strip() == "":
+    if not question.strip():
         st.warning("Please enter a question.")
 
     else:
 
-        with st.spinner("🤖 Gemini is analyzing your business..."):
+        with st.spinner("🤖 Gemini is analyzing..."):
+            answer = generate_ai_insight(question, summary)
 
-            answer = generate_ai_insight(
-                question,
-                summary
-            )
-            
+        # Save conversation
         st.session_state.chat_history.append(
-    {
-        "question": question,
-        "answer": answer
-    }
-)
+            {
+                "question": question,
+                "answer": answer
+            }
+        )
+
+        # Save latest answer for PDF
+        st.session_state.latest_answer = answer
+        
+if "latest_answer" in st.session_state:
+
+    pdf_file = create_pdf(st.session_state.latest_answer)
+
+    with open(pdf_file, "rb") as file:
+
+        st.download_button(
+            "📄 Download PDF Report",
+            data=file,
+            file_name="AI_Business_Report.pdf",
+            mime="application/pdf"
+        )
         
             
 st.header("🤖 AI Business Assistant")
@@ -809,15 +819,15 @@ if st.session_state.chat_history:
             st.success("📋 AI Executive Report")
 
             st.markdown(chat["answer"])
+            
+            if "latest_answer" in st.session_state and chat["answer"] == st.session_state.latest_answer:
+                pdf_file = create_pdf(chat["answer"])
 
-    pdf_file = create_pdf(chat["answer"])
-
-    with open(pdf_file, "rb") as file:
-
-        st.download_button(
-            label="📄 Download PDF Report",
-            data=file,
-            file_name="AI_Business_Report.pdf",
-            mime="application/pdf",
-            use_container_width=True
-        )
+                with open(pdf_file, "rb") as file:
+                    st.download_button(
+                        label="📄 Download PDF Report",
+                        data=file,
+                        file_name="AI_Business_Report.pdf",
+                        mime="application/pdf",
+                        use_container_width=True
+                    )
