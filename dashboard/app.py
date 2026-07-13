@@ -710,7 +710,7 @@ def create_pdf(report_text):
 # =====================================================
 
 st.markdown("---")
-st.header("🤖def create AI Business Assistant")
+st.header("🤖 AI Business Assistant")
 
 st.caption("Ask questions about your business and receive AI-powered insights.")
 
